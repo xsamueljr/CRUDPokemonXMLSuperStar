@@ -98,7 +98,7 @@ public class PokemonStorage {
         String normalizedType = type.trim().toLowerCase();
         return new PokemonStorage(
                 pokemons.stream()
-                        .filter(pokemon -> normalizedType.equals(pokemon.getTipo()))
+                        .filter(pokemon -> normalizedType.equals(pokemon.getTipo().trim().toLowerCase()))
                         .collect(Collectors.toCollection(ArrayList::new))
         );
     }
@@ -124,10 +124,12 @@ public class PokemonStorage {
             nombreEl.setTextContent(pokemon.getNombre());
             pokemonEl.appendChild(nombreEl);
             Element tipoEl = document.createElement("tipo");
+            tipoEl.setTextContent(pokemon.getTipo());
             pokemonEl.appendChild(tipoEl);
             root.appendChild(pokemonEl);
         }
 
+        document.appendChild(root);
 
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
