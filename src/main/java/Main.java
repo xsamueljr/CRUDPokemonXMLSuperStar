@@ -156,7 +156,7 @@ public class Main {
 
         File logFile = new File("pokemons.log");
         try (
-                FileWriter fw = new FileWriter(logFile);
+                FileWriter fw = new FileWriter(logFile, true);
                 BufferedWriter bw = new BufferedWriter(fw)
                 ) {
             bw.write("El día " + formatted + " " + message);
