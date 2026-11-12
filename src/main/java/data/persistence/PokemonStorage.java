@@ -75,6 +75,10 @@ public class PokemonStorage {
         save();
     }
 
+    public void replace(Pokemon old, Pokemon new_) {
+        pokemons.set(pokemons.get(old), new_);
+    }
+
     public void remove(Pokemon pokemon) {
         pokemons.remove(pokemon);
         save();
