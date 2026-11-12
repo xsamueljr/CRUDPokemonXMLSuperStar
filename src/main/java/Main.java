@@ -41,10 +41,10 @@ public class Main {
                     modificar(storage);
                 }
                 case 4 -> {
-                    // eliminar(storage);
+                    eliminar(storage);
                 }
                 case 5 -> {
-                    // exportarXML(storage);
+                    exportarXML(storage);
                 }
                 case 0 -> {
                     System.out.println("Hasta lueguis");
@@ -54,6 +54,36 @@ public class Main {
                 }
             }
         } while (opcion != 0);
+    }
+
+    private static void exportarXML(PokemonStorage storage) {
+        System.out.print("Escribe el tipo que quieres exportar");
+        String tipo = scanner.nextLine();
+
+        storage.filterByType(tipo).exportToXML();
+        System.out.println("Exportado con éxito");
+    }
+
+    private static void eliminar(PokemonStorage storage) {
+        System.out.print("Introduce ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        Pokemon pokemon = storage.getById(id);
+        if (pokemon == null) {
+            System.out.println("No hay un Pokémon con ese ID");
+            return;
+        }
+
+        System.out.println(pokemon);
+        System.out.print("¿Seguro que quieres eliminarlo? (s/n): ");
+        boolean confirmacion = scanner.nextLine().trim().toLowerCase().charAt(0) == 's';
+        if (confirmacion) {
+            storage.remove(pokemon);
+            System.out.println("Borrado con éxito");
+        } else {
+            System.out.println("Cancelado");
+        }
     }
 
     private static void modificar(PokemonStorage storage) {
@@ -68,7 +98,7 @@ public class Main {
         }
 
         Pokemon nuevo = pedirDatosPokemon(id);
-
+        storage.replace(pokemon, nuevo);
     }
 
     private static void crear(PokemonStorage storage) {
