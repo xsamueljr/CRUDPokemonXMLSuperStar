@@ -5,6 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import java.util.List;
 import java.util.Scanner;
 
@@ -35,13 +38,13 @@ public class Main {
                     crear(storage);
                 }
                 case 3 -> {
-
+                    modificar(storage);
                 }
                 case 4 -> {
-
+                    // eliminar(storage);
                 }
                 case 5 -> {
-
+                    // exportarXML(storage);
                 }
                 case 0 -> {
                     System.out.println("Hasta lueguis");
@@ -53,14 +56,45 @@ public class Main {
         } while (opcion != 0);
     }
 
+    private static void modificar(PokemonStorage storage) {
+        System.out.print("Introduce ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        Pokemon pokemon = storage.getById(id);
+        if (pokemon == null) {
+            System.out.println("No hay un Pokémon con ese ID");
+            return;
+        }
+
+        Pokemon nuevo = pedirDatosPokemon(id);
+
+    }
+
     private static void crear(PokemonStorage storage) {
         int id = pedirId(storage);
+        Pokemon pokemon = pedirDatosPokemon(id);
+        storage.add(pokemon);
+        System.out.println("Añadido con éxito");
+        log("se dio de alta a " + pokemon.getNombre());
+    }
+
+    private static Pokemon pedirDatosPokemon(int id) {
+        System.out.print("Introduce nombre: ");
+        String nombre = scanner.nextLine();
+        System.out.print("Introduce tipo: ");
+        String tipo = scanner.nextLine();
+        return new Pokemon(id, nombre, tipo);
     }
 
     private static int pedirId(PokemonStorage storage) {
         while (true) {
             System.out.println("Introduce ID: ");
             int id = scanner.nextInt();
+            scanner.nextLine();
+            Pokemon existente = storage.getById(id);
+            if (existente == null) return id;
+            System.out.println("Ya hay un Pokémon con ese ID");
         }
     }
 
@@ -74,13 +108,26 @@ public class Main {
         }
     }
 
+    /**
+     * Escribe el mensaje en un archivo de log
+     *
+     * El mensaje empieza con "El día [diaActual]
+     * @param message
+     */
     private static void log(String message) {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("dd/MM/uuuu")
+                .withResolverStyle(ResolverStyle.STRICT);
+
+        String formatted = formatter.format(now);
+
         File logFile = new File("pokemons.log");
         try (
                 FileWriter fw = new FileWriter(logFile);
                 BufferedWriter bw = new BufferedWriter(fw)
                 ) {
-            bw.write(message);
+            bw.write("El día " + formatted + " " + message);
             bw.newLine();
             bw.flush();
         } catch (IOException e) {
