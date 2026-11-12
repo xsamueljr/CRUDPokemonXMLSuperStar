@@ -81,6 +81,7 @@ public class Main {
         if (confirmacion) {
             storage.remove(pokemon);
             System.out.println("Borrado con éxito");
+            log("se borró a " + pokemon.getNombre());
         } else {
             System.out.println("Cancelado");
         }
@@ -99,6 +100,7 @@ public class Main {
 
         Pokemon nuevo = pedirDatosPokemon(id);
         storage.replace(pokemon, nuevo);
+        log("se modificó a " + pokemon.getNombre());
     }
 
     private static void crear(PokemonStorage storage) {
